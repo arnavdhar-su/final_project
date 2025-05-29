@@ -1,0 +1,58 @@
+fun_activities = {
+    "hiking": ["boots", "water", "snacks", "map", "sunscreen"],
+    "beach": ["swimsuit", "towel", "sunscreen", "beach ball", "flip flops"],
+    "bbq": ["grill", "charcoal", "food", "cooler", "forks"],
+    "road trip": ["snacks", "charger", "music", "first aid kit"]
+}
+
+def ask_activities():
+    print("What are you doing this summer?")
+    print("Pick from: hiking, beach, bbq, road trip")
+    print("Type your choices with commas. Like this: beach, bbq")
+    answer = input("> ").lower()
+    picked = [thing.strip() for thing in answer.split(",") if thing.strip() in fun_activities]
+    if len(picked) == 0:
+        print("You didn’t type anything from the list. Bye!")
+        exit()
+    return picked
+
+def make_packing_list(picked):
+    stuff = []
+    for activity in picked:
+        stuff += fun_activities[activity]
+    return list(set(stuff))
+
+def add_extra_items(my_list):
+    print("Do you want to add your own items? (yes or no)")
+    answer = input("> ").lower()
+    if answer == "yes":
+        print("Type one item at a time. Type 'done' when you’re finished.")
+        while True:
+            thing = input("Add: ")
+            if thing.lower() == "done":
+                break
+            if thing != "":
+                my_list.append(thing)
+    return my_list
+
+def save_list(final_list):
+    print("Do you want to save your list to a file? (yes or no)")
+    answer = input("> ").lower()
+    if answer == "yes":
+        with open("summer_list.txt", "w") as file:
+            file.write("MY SUMMER LIST:\n\n")
+            for item in final_list:
+                file.write("- " + item + "\n")
+        print("Saved as 'summer_list.txt'!")
+
+def run():
+    picked_activities = ask_activities()
+    print("You picked:", ", ".join(picked_activities))
+    packing_list = make_packing_list(picked_activities)
+    packing_list = add_extra_items(packing_list)
+    print("\nHere is your final list:")
+    for item in packing_list:
+        print("- " + item)
+    save_list(packing_list)
+
+run()
